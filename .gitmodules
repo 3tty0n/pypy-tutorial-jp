@@ -1,3 +1,0 @@
-[submodule "pypy"]
-	path = pypy
-	url = git@github.com:pypy/pypy.git

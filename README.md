@@ -11,15 +11,14 @@ This version has been reproduced to serve as educational material for lab intern
 - Day 2: [Tutorial Part 2: Adding a JIT](https://pypy.org/posts/2011/04/tutorial-part-2-adding-jit-8121732841568309472.html)を読む
 - Day 3, Day 4: BFインタプリタのJITコンパイラを最適化する or [PyPyの論文](https://doc.pypy.org/en/latest/extradoc.html)を読む
 
-## Installation
-`rpython` 共々、本リポジトリのsubmoduleとして導入します。
-```
-git clone --recursive git@github.com:prg-titech/pypy-tutorial-jp.git
-```
+## Requirements
+- Python 2
+- RPython
 
-Part 1 - Translating 内の `hg clone https://bitbucket.org/pypy/pypy` による `rpython` のインストールは現在機能しません。
+## 注意: `rpython` の導入方法の変更
+Part 1 - Translating 内の `hg clone https://bitbucket.org/pypy/pypy` は古い情報です。
 `rpython` は 2024年10月時点で GiHub で管理されている pypy リポジトリ内の `pypy/rpython/bin/rpython` に配置されています。
-当該箇所は以下に読み替えてください。（上記の導入を行っていれば既にインストール済みなので不要）
+当該箇所は以下に置き換えてください。
 ```
 git clone https://github.com/pypy/pypy
 ```
