@@ -1,0 +1,6 @@
+example*-c
+example*.pyc
+pypy
+logfile
+evalenv
+__pycache__
