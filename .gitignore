@@ -1,6 +1,5 @@
-example*-c
-example*.pyc
-pypy
+*-c
+*.pyc
 logfile
 evalenv
 __pycache__

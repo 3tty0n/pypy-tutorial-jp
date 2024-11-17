@@ -21,10 +21,23 @@ This version has been reproduced to serve as educational material for lab intern
 git clone --recursive git@github.com:prg-titech/pypy-tutorial-jp.git
 ```
 
-- （注）Part 1 - Translating 内の `hg clone https://bitbucket.org/pypy/pypy` は古い情報です。`rpython` は 2024年10月時点で GiHub で管理されている pypy リポジトリ内の `pypy/rpython/bin/rpython` に配置されています。`rpython`を手動で導入する場合は、当該箇所を以下に読み換えてください。
-  ```sh
-  git clone https://github.com/pypy/pypy
+## 旧情報との差分
+### `pypy` 及び `rpython` の差分管理方法の変更
+Part 1 - Translating 内の `hg clone https://bitbucket.org/pypy/pypy` は古い情報です。
+`rpython` は 2024年10月時点で GiHub で管理されている pypy リポジトリ内の `pypy/rpython/bin/rpython` に配置されています。
+
+`rpython`を手動で導入する場合は、当該箇所を以下に読み換えてください。ただし、上記の導入方法(Installation)を取った場合は既に `pypy` が既にローカルに配置済みのため、不要です。
+```sh
+git clone https://github.com/pypy/pypy
   ```
+
+### `rpython` で BF インタプリタを変換
+Part 1最終節およびPart 2の `rpython` translatorの実行は、スクリプトの配置先の変更に伴い、`/pypy/pypy/translator/goal/translate.py` を `./pypy/rpython/bin/rpython` に読み替えてください。`(your interpreter).py`を変換するには以下を実行してください。`--opt=jit` オプションをつけると、変換先のインタプリタ `(your interpreter)-c` にJITコンパイラが生成され、実行中に使用されます。
+```sh
+python ./pypy/rpython/bin/rpython (--opt=jit)* (your interpreter).py
+```
+
+### 他注意点
 - （注）["Download and Install"](https://pypy.org/download.html) からダウンロードできるprebuildバイナリには`rpython`は含まれていないことに注意してください。
 - （注）RPythonは **Python 2** で書かれていることに注意してください。
   - Python 3で実行すると構文解析エラーが出力されます。
