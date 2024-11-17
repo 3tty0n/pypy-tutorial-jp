@@ -15,15 +15,18 @@ This version has been reproduced to serve as educational material for lab intern
 - Python 2
 - RPython
 
-## 注意: `rpython` の導入方法の変更
-Part 1 - Translating 内の `hg clone https://bitbucket.org/pypy/pypy` は古い情報です。
-`rpython` は 2024年10月時点で GiHub で管理されている pypy リポジトリ内の `pypy/rpython/bin/rpython` に配置されています。
-当該箇所は以下に置き換えてください。
+## Installation
+`rpython`(の配置されている`pypy`)を本リポジトリのサブモジュールとして導入します。
+```sh
+git clone --recursive git@github.com:prg-titech/pypy-tutorial-jp.git
 ```
-git clone https://github.com/pypy/pypy
-```
-- ["Download and Install"](https://pypy.org/download.html) からダウンロードできるprebuildバイナリには`rpython`は含まれていないことに注意してください。
-- RPythonは **Python 2** で書かれていることに注意してください。
+
+- （注）Part 1 - Translating 内の `hg clone https://bitbucket.org/pypy/pypy` は古い情報です。`rpython` は 2024年10月時点で GiHub で管理されている pypy リポジトリ内の `pypy/rpython/bin/rpython` に配置されています。`rpython`を手動で導入する場合は、当該箇所を以下に読み換えてください。
+  ```sh
+  git clone https://github.com/pypy/pypy
+  ```
+- （注）["Download and Install"](https://pypy.org/download.html) からダウンロードできるprebuildバイナリには`rpython`は含まれていないことに注意してください。
+- （注）RPythonは **Python 2** で書かれていることに注意してください。
   - Python 3で実行すると構文解析エラーが出力されます。
   - [pyenv](https://github.com/pyenv/pyenv)を使うと両バージョンを容易に切り替えられます。
   ```sh
