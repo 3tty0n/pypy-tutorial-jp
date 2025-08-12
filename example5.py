@@ -12,7 +12,8 @@ import sys
 # So that you can still run this module under standard CPython, I add this
 # import guard that creates a dummy class instead.
 try:
-    from rpython.rlib.jit import JitDriver, purefunction, elidable, promote
+    from rpython.rlib.jit import JitDriver, purefunction, elidable, promote, unroll_safe, hint, promote_string
+    from rpython.rlib.objectmodel import always_inline
 except ImportError:
     class JitDriver(object):
         def __init__(self,**kw): pass
@@ -21,16 +22,19 @@ except ImportError:
     def purefunction(f): return f
     def promote(f): return f
     def elidable(f): return f
+    def promote_string(f): return f
+    def always_inline(f): return f
+
 
 def get_location(pc, program, bracket_map):
     return "%s_%s_%s" % (
             program[pc-1], program[pc], program[pc+1]
             )
 
-jitdriver = JitDriver(greens=['pc', 'program', 'bracket_map'], reds=['tape'],
-        get_printable_location=get_location)
+jitdriver = JitDriver(greens=['pc', 'program', 'bracket_map'], reds=['position', 'thetape'],
+                      get_printable_location=get_location)
 
-@purefunction
+@elidable
 def get_matching_bracket(bracket_map, pc):
     return bracket_map[pc]
 
@@ -45,45 +49,50 @@ RBRACK = ord(']')
 
 def mainloop(program, bracket_map):
     pc = 0
-    tape = Tape()
+    thetape = [0] * 1024
+    position = 0
 
     while pc < len(program):
-        jitdriver.jit_merge_point(pc=pc, tape=tape, program=program,
+        jitdriver.jit_merge_point(pc=pc, thetape=thetape, position=position, program=program,
                 bracket_map=bracket_map)
 
-        code = ord(program[pc])
+        code = program[pc]
 
-        if code == RIGHT:
-            tape.advance()
+        if code == '>':
+            # tape.advance()
+            position += 1
 
-        elif code == LEFT:
-            tape.devance()
+        elif code == '<':
+            # tape.devance()
+            position -= 1
 
-        elif code == PLUS:
-            tape.inc()
+        elif code == '+':
+            # tape.inc()
+            thetape[position] += 1
 
-        elif code == MINUS:
-            tape.dec()
+        elif code == '-':
+            # tape.dec()
+            thetape[position] -= 1
 
-        elif code == DOT:
+        elif code == '.':
             # print
-            v = chr(tape.get())
-            promote(v)
+            v = promote(chr(thetape[position]))
             os.write(1, v)
 
-        elif code == COMMA:
+        elif code == ',':
             # read from stdin
             v = promote(ord(os.read(0, 1)[0]))
-            tape.set(v)
+            if v != 0:
+                thetape[position] = v
 
-        elif code == LBRACK and tape.get() == 0:
+        elif code == '[' and thetape[position] == 0:
             # Skip forward to the matching ]
             pc = get_matching_bracket(bracket_map, pc)
 
-        elif code == RBRACK and tape.get() != 0:
+        elif code == ']' and thetape[position] != 0:
             # Skip back to the matching [
             pc = get_matching_bracket(bracket_map, pc)
-            jitdriver.can_enter_jit(pc=pc, tape=tape, program=program,
+            jitdriver.can_enter_jit(pc=pc, thetape=thetape, position=position, program=program,
                     bracket_map=bracket_map)
 
         pc += 1
@@ -105,8 +114,10 @@ class Tape(object):
         self.position += 1
         assert not len(self.thetape) <= self.position
     def devance(self):
+        assert self.position >= 0
         self.position -= 1
 
+@unroll_safe
 def parse(program):
     parsed = []
     bracket_map = {}
