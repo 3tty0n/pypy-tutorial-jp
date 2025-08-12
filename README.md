@@ -58,7 +58,22 @@ PYPYLOG=jit-log-opt:logfile ./example5-c test100.b
 - `setfield_gc`, `getfield_gc` はオブジェクトのフィールドの読み書き (フィールド名が引数に出現しているはず)
 です。
 
-インタプリタの中で `green` とした `pc`, `program`, `bracket_map` に関する命令がもし残っていたら、質のよくないコードが出ている可能性があります。
+インタプリタの中で `green` とした `pc`, `program`, `bracket_map` に関する命令が
+トレース内に残っていたら、質のよくないコードが出ている可能性があります。
+
+他にも、 トレースにかかった時間やトレース内に記録された命令数などのまとまった統
+計情報を出力するためのオプション `jit-summary`、コンパイルされた機械語を出力する
+ためのオプション `jit-backend` も `PYPYLOG` はサポートしています。
+
+以下のように指定すると複数のプロファイル情報をまとめて出力することができます。
+
+```
+PYPYLOG=jit-log-opt,jit-backend,jit-summary:logfile ./example5-c test100.b
+```
+
+全てのプロファイル情報を出力するには `PYPYLOG=jit:logfile` とします。
+
+また `:` の右側に `-` を指定すると stderr に情報を出力することができます。
 
 ## 最適化のヒント
 最適化のポイント
