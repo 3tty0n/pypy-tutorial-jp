@@ -136,3 +136,7 @@ deactivate
 ```
 実行例：
 <p align="center"><img width="80%" alt="execution_time_plot.png" src="figs/execution_time_plot.png"></p>
+
+## RPython/PyPy を使用したインタプリタを最適化するヒント
+
+Carl Friedrich が過去にまとめた [blog](https://pypy.org/posts/2011/03/controlling-tracing-of-interpreter-with_15-3281215865169782921.html) が参考になります。
