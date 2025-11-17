@@ -10,6 +10,7 @@ This version has been reproduced to serve as educational material for lab intern
 - Day 1: [Tutorial: Writing an Interpreter with PyPy, Part 1](https://pypy.org/posts/2011/04/tutorial-writing-interpreter-with-pypy-3785910476193156295.html#)を読む
 - Day 2: [Tutorial Part 2: Adding a JIT](https://pypy.org/posts/2011/04/tutorial-part-2-adding-jit-8121732841568309472.html)を読む
 - Day 3, Day 4: BFインタプリタのJITコンパイラを最適化する or [PyPyの論文](https://doc.pypy.org/en/latest/extradoc.html)を読む
+- Day 5 (, Day 6): (自習) 発表スライド準備
 
 ## Requirements
 - Python 2
