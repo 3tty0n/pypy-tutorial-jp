@@ -1,4 +1,4 @@
-あ# Tutorial: Writing an Interpreter with RPython/PyPy
+# Tutorial: Writing an Interpreter with RPython/PyPy
 This is a copy of a source code of [a guest blog post by Andrew Brown](https://pypy.org/posts/2011/04/tutorial-writing-interpreter-with-pypy-3785910476193156295.html#), which was originally posted to the pypy-dev mailing list.
 The original source code of this tutorial was hosted on Bitbucket, but it is no longer available in 2024.
 This version has been reproduced to serve as educational material for lab interns at the [PRG-lab](https://prg.is.titech.ac.jp/) of Institute of Science Tokyo (from September 2024, formerly Tokyo Institute of Technology).
