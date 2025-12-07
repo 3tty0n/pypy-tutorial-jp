@@ -28,6 +28,7 @@ except ImportError:
 
 def get_location(pc, program, bracket_map):
     return "%s_%s_%s" % (
+            #program[:pc], program[pc], program[pc+1:]
             program[pc-1], program[pc], program[pc+1]
             )
 
@@ -56,40 +57,42 @@ def mainloop(program, bracket_map):
         jitdriver.jit_merge_point(pc=pc, thetape=thetape, position=position, program=program,
                 bracket_map=bracket_map)
 
-        code = program[pc]
+        code = promote(ord(program[pc]))
 
-        if code == '>':
+        if code == RIGHT:
             # tape.advance()
             position += 1
+            assert position < len(thetape)
 
-        elif code == '<':
+        elif code == LEFT:
             # tape.devance()
             position -= 1
+            assert position >= 0
 
-        elif code == '+':
+        elif code == PLUS:
             # tape.inc()
             thetape[position] += 1
 
-        elif code == '-':
+        elif code == MINUS:
             # tape.dec()
             thetape[position] -= 1
 
-        elif code == '.':
+        elif code == DOT:
             # print
             v = promote(chr(thetape[position]))
             os.write(1, v)
 
-        elif code == ',':
+        elif code == COMMA:
             # read from stdin
             v = promote(ord(os.read(0, 1)[0]))
             if v != 0:
                 thetape[position] = v
 
-        elif code == '[' and thetape[position] == 0:
+        elif code == LBRACK and thetape[position] == 0:
             # Skip forward to the matching ]
             pc = get_matching_bracket(bracket_map, pc)
 
-        elif code == ']' and thetape[position] != 0:
+        elif code == RBRACK and thetape[position] != 0:
             # Skip back to the matching [
             pc = get_matching_bracket(bracket_map, pc)
             jitdriver.can_enter_jit(pc=pc, thetape=thetape, position=position, program=program,
@@ -97,25 +100,6 @@ def mainloop(program, bracket_map):
 
         pc += 1
 
-class Tape(object):
-    def __init__(self):
-        self.thetape = [0] * 1024
-        self.position = 0
-
-    def get(self):
-        return self.thetape[self.position]
-    def set(self, val):
-        self.thetape[self.position] = val
-    def inc(self):
-        self.thetape[self.position] += 1
-    def dec(self):
-        self.thetape[self.position] -= 1
-    def advance(self):
-        self.position += 1
-        assert not len(self.thetape) <= self.position
-    def devance(self):
-        assert self.position >= 0
-        self.position -= 1
 
 @unroll_safe
 def parse(program):
