@@ -22,7 +22,7 @@ except ImportError:
 
 def get_location(pc, program, bracket_map):
     return "%s_%s_%s" % (
-            program[:pc], program[pc], program[pc+1:]
+            program[pc-1], program[pc], program[pc+1]
             )
 
 jitdriver = JitDriver(greens=['pc', 'program', 'bracket_map'], reds=['tape'],
@@ -35,7 +35,7 @@ def get_matching_bracket(bracket_map, pc):
 def mainloop(program, bracket_map):
     pc = 0
     tape = Tape()
-    
+
     while pc < len(program):
         jitdriver.jit_merge_point(pc=pc, tape=tape, program=program,
                 bracket_map=bracket_map)
@@ -53,11 +53,11 @@ def mainloop(program, bracket_map):
 
         elif code == "-":
             tape.dec()
-        
+
         elif code == ".":
             # print
             os.write(1, chr(tape.get()))
-        
+
         elif code == ",":
             # read from stdin
             tape.set(ord(os.read(0, 1)[0]))
@@ -65,7 +65,7 @@ def mainloop(program, bracket_map):
         elif code == "[" and tape.get() == 0:
             # Skip forward to the matching ]
             pc = get_matching_bracket(bracket_map, pc)
-            
+
         elif code == "]" and tape.get() != 0:
             # Skip back to the matching [
             pc = get_matching_bracket(bracket_map, pc)
@@ -110,7 +110,7 @@ def parse(program):
                 bracket_map[left] = right
                 bracket_map[right] = left
             pc += 1
-    
+
     return "".join(parsed), bracket_map
 
 def run(fp):
@@ -130,13 +130,13 @@ def entry_point(argv):
     except IndexError:
         print "You must supply a filename"
         return 1
-    
+
     run(os.open(filename, os.O_RDONLY, 0777))
     return 0
 
 def target(*args):
     return entry_point, None
-    
+
 def jitpolicy(driver):
     from rpython.jit.codewriter.policy import JitPolicy
     return JitPolicy()
