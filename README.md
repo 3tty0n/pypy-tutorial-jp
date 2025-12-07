@@ -34,8 +34,13 @@ git clone https://github.com/pypy/pypy
 
 ### `rpython` で BF インタプリタを変換
 Part 1最終節およびPart 2に記載の translator 実行パスは古いため、`/pypy/pypy/translator/goal/translate.py` を `./pypy/rpython/bin/rpython` に読み替えてください。インタプリタ`(your interpreter).py`を変換するには次を実行します。`--opt=jit` を付けると変換先 `(your interpreter)-c` にJITコンパイラが含まれます。
+
 ```sh
-python ./pypy/rpython/bin/rpython (--opt=jit)* (your interpreter).py
+# インタプリタをC言語経由でネイティブコードへ変換
+python2 ./pypy/rpython/bin/rpython -O2 (your interpreter).py
+
+# インタプリタをC言語経由でネイティブコードへ変換かつメタトレーシングJITコンパイラを適用
+python2 ./pypy/rpython/bin/rpython -Ojit (your interpreter).py
 ```
 
 ### 他注意点
@@ -74,7 +79,7 @@ PYPYLOG=jit-log-opt,jit-backend,jit-summary:logfile ./example5-c test100.b
 
 ### jitviewer
 
-[jitviewer]() は PyPy のトレースログを可視化する簡易 Web アプリケーションです。インストールと利用方法は次のとおりです。
+[jitviewer](https://github.com/3tty0n/jitviewer#) は PyPy のトレースログを可視化する簡易 Web アプリケーションです。インストールと利用方法は次のとおりです。
 
 ```sh
 # インストール
@@ -113,10 +118,7 @@ $ PYTHONPATH=/path/to/pypy jitviewer.py -l /path/to/tracelog
 ```
 ループの解釈: 今の pc の値を2つ左のポインタに加算し（元の位置は set 0）、元の pc に戻る。
 ```
-[-<<+>>]
-```
-```
-[<<+>>-]
+[-<I>-]
 ```
 
 #### 頻出パターン：add nパターンの一般化 (Run-length encoding)
